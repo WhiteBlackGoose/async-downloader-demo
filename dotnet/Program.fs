@@ -10,7 +10,7 @@ let count = 20000
 let slim = new SemaphoreSlim 300
 let res =
     { 0 .. count }
-    |> Seq.map (fun _ -> task {
+    |> Seq.map (fun _ -> Task.Run<HttpResponseMessage> (fun () -> task {
         do! slim.WaitAsync()
         let! resp =  req.GetAsync(my_webpage)
         assert (resp.StatusCode = System.Net.HttpStatusCode.OK)
@@ -18,7 +18,7 @@ let res =
         let _ = slim.Release ()
         assert (body.Length = 6113 || body.Length = 25)
         return resp
-    })
+    }))
     |> Task.WhenAll
     |> Async.AwaitTask
     |> Async.RunSynchronously
