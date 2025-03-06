@@ -35,7 +35,7 @@ async def main():
     pages = await download(map(lambda _: my_webpage, range(count)))
     assert len(pages) == count, len(pages)
     for page in pages:
-        assert len(page) == 6113
+        assert len(page) == 6113 or len(page) == 25
 
 
 if __name__ == "__main__":

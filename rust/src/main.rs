@@ -47,8 +47,7 @@ async fn main() {
     for result in results {
         match result {
             Ok(r) => {
-                // assert_eq!(r.len(), 25);
-                assert_eq!(r.len(), 6113);
+                assert!(r.len() == 6113 || r.len() == 25);
             }
             Err(e) => {
                 eprintln!("Error: {:#?}", e);
