@@ -1,41 +1,32 @@
 use std::sync::Arc;
 
-use futures::{stream::FuturesUnordered, StreamExt};
+use futures::future::join_all;
 use reqwest::header::CONNECTION;
-use tokio::spawn;
+use tokio::{spawn, sync::Semaphore};
 
-async fn download(
-    url: &'static str,
-    mut count: u64,
-    lim: u64,
-) -> Vec<Result<String, reqwest::Error>> {
+async fn download(url: &'static str, count: u64, lim: u64) -> Vec<Result<String, reqwest::Error>> {
     let client = Arc::new(reqwest::Client::new());
-    let mut res = vec![];
-    let fut = || {
-        let client = client.clone();
-        async move {
-            client
-                .get(url)
-                .header(CONNECTION, "close")
-                .send()
-                .await?
-                .text()
-                .await
-        }
-    };
-    let mut set = FuturesUnordered::new();
-    for _ in 0..lim.min(count) {
-        set.push(spawn((fut)()));
-        count -= 1;
-    }
-    while let Some(result) = set.next().await {
-        res.push(result.unwrap());
-        if count > 0 {
-            set.push(spawn((fut)()));
-            count -= 1;
-        }
-    }
-    res
+    let sem = Arc::new(Semaphore::new(lim as usize));
+    join_all((0..count).map(|_| {
+        spawn({
+            let client = client.clone();
+            let sem = sem.clone();
+            async move {
+                let _permit = sem.acquire().await.unwrap();
+                client
+                    .get(url)
+                    .header(CONNECTION, "close")
+                    .send()
+                    .await?
+                    .text()
+                    .await
+            }
+        })
+    }))
+    .await
+    .into_iter()
+    .map(|r| r.unwrap())
+    .collect()
 }
 
 #[tokio::main]
@@ -50,7 +41,7 @@ async fn main() {
                 assert!(r.len() == 6113 || r.len() == 25);
             }
             Err(e) => {
-                eprintln!("Error: {:#?}", e);
+                panic!("Error: {:#?}", e);
             }
         }
     }
