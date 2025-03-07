@@ -1,10 +1,28 @@
 
 # Quack
 
-You need `filebrowser` for it to run. Use the `Makefile`.
+You need `filebrowser` for it to run. See the `Makefile`.
 
-|          | .NET  | .NET NAOT | Python | Rust | Rust multi-threaded |
-| -------- | ----  | --        | ---    | ---  | ---                 |
-| Real     | 2.7s  | 1.0s      | 2.1s   | 1.6s | 0.7s                |
-| User     | 6.8s  | 3.5s      | 1.7s   | 1.4s | 1.2s                |
-| Sys      | 17.6s | 0.8s      | 0.3s   | 2.0s | 1.8s                |
+## 20000 requests
+
+|          | .NET | Python | Rust |
+| -------- | --   | ---    | ---  |
+| Real     | 0.8s | 2.1s   | 0.7s |
+| User     | 2.7s | 1.7s   | 1.3s |
+| Sys      | 0.9s | 0.3s   | 1.8s |
+
+Winners:
+ - 🚀 Fastest: Rust
+ - 💚 Energy-efficient: Rust
+
+## 200000 requests
+
+|          | .NET  | Python | Rust  |
+| -------- | --    | ---    | ---   |
+| Real     | 8.0s  | 21.7s  | 6.6s  |
+| User     | 17.2s | 17.7s  | 13.2s |
+| Sys      | 6.4s  | 3.0s   | 18.3s |
+
+Winners:
+- 🚀 Fastest: Rust
+- 💚 Energy-efficient: .NET

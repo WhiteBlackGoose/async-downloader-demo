@@ -31,7 +31,7 @@ async def download(urls: Iterable[str]) -> list[str]:
 
 async def main():
     my_webpage = "http://127.0.0.1:8000/index.html"
-    count = 20000
+    count = 200000
     pages = await download(map(lambda _: my_webpage, range(count)))
     assert len(pages) == count, len(pages)
     for page in pages:
