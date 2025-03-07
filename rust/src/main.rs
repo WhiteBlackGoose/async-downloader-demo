@@ -33,7 +33,7 @@ async fn download(url: &'static str, count: u64, lim: u64) -> Vec<Result<String,
 async fn main() {
     env_logger::init();
     let my_webpage = "http://127.0.0.1:8000/index.html";
-    let count = 20000;
+    let count = 200000;
     let results = download(my_webpage, count, 300).await;
     for result in results {
         match result {

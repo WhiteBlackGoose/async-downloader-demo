@@ -13,7 +13,7 @@ You need `filebrowser` for it to run. See the `Makefile`.
 
 Winners:
  - 🚀 Fastest: Rust
- - 💚 Energy-efficient: Rust
+ - 💚 Energy-efficient: Python
 
 ## 200000 requests
 
@@ -25,4 +25,4 @@ Winners:
 
 Winners:
 - 🚀 Fastest: Rust
-- 💚 Energy-efficient: .NET
+- 💚 Energy-efficient: Python
