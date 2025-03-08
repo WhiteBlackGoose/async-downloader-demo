@@ -6,7 +6,7 @@ open System.Threading
 let my_webpage = "http://127.0.0.1:8000/index.html"
 
 let req = new HttpClient()
-let count = 20000
+let count = 200000
 let slim = new SemaphoreSlim 300
 let res =
     { 0 .. count }
